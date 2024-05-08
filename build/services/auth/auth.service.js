@@ -9,15 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userRegisterService = void 0;
+exports.userRegistrationService = void 0;
 const userInfoDetails_1 = require("../../models/userInfoDetails");
-const userRegisterService = (data) => __awaiter(void 0, void 0, void 0, function* () {
+const userRegistrationService = (data) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, userInfoDetails_1.userRegister)(data);
+        const result = yield (0, userInfoDetails_1.userRegistration)(data);
         return result;
     }
     catch (error) {
         throw new Error(error);
     }
 });
-exports.userRegisterService = userRegisterService;
+exports.userRegistrationService = userRegistrationService;

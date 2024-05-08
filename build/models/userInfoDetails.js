@@ -9,21 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userRegister = exports.findByEmail = void 0;
+exports.userRegistration = exports.findByEmail = void 0;
 const database_1 = require("../config/database");
-const findByEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
-    const con = (0, database_1.getDatabaseConnection)();
+const findByEmail = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    const con = yield (0, database_1.getDatabaseConnection)();
     let query = 'SELECT email FROM user_register WHERE email=?';
-    let result = (yield con).promise().query(query, [email]);
-    return result[0];
+    let result = yield con.promise().query(query, [data]);
+    return result[0][0];
 });
 exports.findByEmail = findByEmail;
-const userRegister = (data) => __awaiter(void 0, void 0, void 0, function* () {
+const userRegistration = (data) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = data;
-    const con = (0, database_1.getDatabaseConnection)();
+    const con = yield (0, database_1.getDatabaseConnection)();
     let query = 'INSERT INTO user_register (email,password) VALUES (?,?)';
-    let result = (yield con).promise().query(query, [email, password]);
-    console.log(result[0]);
+    let result = yield con.promise().query(query, [email, password]);
+    let id = result[0].insertId;
+    query = `SELECT email FROM user_register WHERE register_id = ?`;
+    result = yield con.promise().query(query, [id]);
     return result[0];
 });
-exports.userRegister = userRegister;
+exports.userRegistration = userRegistration;

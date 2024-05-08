@@ -1,7 +1,7 @@
 
 import { userRegistration } from "../../models/userInfoDetails";
 
-export const userRegisterService =async(data:any)=>{
+export const userRegistrationService =async(data:any)=>{
     try{
         const result = await userRegistration(data)
         return result

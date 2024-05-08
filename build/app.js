@@ -35,6 +35,7 @@ const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const category_routes_1 = __importDefault(require("./routes/category.routes"));
 const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
 const bodyParser = __importStar(require("body-parser"));
+const AppError_1 = __importDefault(require("./utils/AppError"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(bodyParser.json());
@@ -48,6 +49,19 @@ app.get("/", (req, res) => {
 });
 app.use("/api", category_routes_1.default);
 app.use("/api", auth_routes_1.default);
+// unhandled routes
+app.all("*", (req, res, next) => {
+    next(new AppError_1.default(404, `Route ${req.originalUrl} not found`));
+});
+// GLOBAL ERROR HANDLER
+app.use((error, req, res, next) => {
+    error.status = error.status || "error";
+    error.statusCode = error.statusCode || 500;
+    res.status(error.statusCode).json({
+        status: error.status,
+        message: error.message,
+    });
+});
 app.listen(index_1.PORT, () => {
     console.log(`Server is running on ${index_1.PORT}`);
 });
