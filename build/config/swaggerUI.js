@@ -28,4 +28,5 @@ exports.swaggerOptions = {
     ],
     docExpansion: 'none',
     apis: ['./docs/*.yaml',]
+    // apis: ['../../docs/*.yaml',]
 };

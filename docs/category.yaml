@@ -1,0 +1,68 @@
+openapi: 3.0.0
+info:
+  title: Authentication
+  description: APIs to authenticate admin
+  version: 1.0.0
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+# sigin api
+paths:
+
+  /api/getcategory:
+    get:
+      summary: fetch the list of category
+      description: >-
+        This api fetch the list of party  exists in the database
+      tags: ["Category [Master]"]
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: >-
+                      true
+                  message:
+                    type: string
+                    example: >-
+                      Data found Successfully!!!
+                  data:
+                  type: array
+                  example: >-
+                    [
+                       {
+                          "party_id": 2,
+                          "name": "test 1"
+                        },
+                        {
+                          "party_id": 3,
+                          "name": "test 1"
+                        },
+                        {
+                          "party_id": 4,
+                          "name": "tribikram"
+                        }
+                    ]
+                required:
+                  - status
+                  - message
+                  - data
+        "400":
+          description: Bad request error message
+        "401":
+          description: Unauthorized error message
+        "500":
+          description: Internal Server Error
+
+  

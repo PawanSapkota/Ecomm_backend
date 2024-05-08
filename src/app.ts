@@ -4,9 +4,13 @@
 import { swaggerOptions } from "./config/swaggerUI";
 import  swaggerJsDoc from "swagger-jsdoc";
 import swaggerUiExpress from "swagger-ui-express";
+import CategoryRoutes from "./routes/category.routes"
+import AuthRoutes from "./routes/auth.routes"
+import * as bodyParser from "body-parser";
 
 const app:Application = express();
 app.use(express.json());
+app.use(bodyParser.json());
 
 getDatabaseConnection()  //Database configuration
 
@@ -16,10 +20,12 @@ app.use('/api-docs', swaggerUiExpress.serve, swaggerUiExpress.setup(swaggerDocs)
 
 app.get("/",(req:Request,res:Response)=>{
     res.status(200).json({
-      
       message:'working'
     })
 })
+
+app.use("/api",CategoryRoutes);
+app.use("/api",AuthRoutes)
 
  app.listen(PORT , ()=>{
    console.log(`Server is running on ${PORT}`)

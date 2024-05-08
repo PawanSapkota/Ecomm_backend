@@ -1,4 +1,4 @@
-import {Pool,PoolConnection,createPool} from 'mysql2';
+import mysql,{Pool,PoolConnection,createPool} from 'mysql2';
 import {DB_HOST,DB_NAME,DB_PASSWORD,DB_USERNAME} from  './index'
 
  const connection:Pool = createPool({    
@@ -22,6 +22,7 @@ export function getDatabaseConnection(): Promise<PoolConnection> {
         });
     });
 }
+
 
 // export function getDatabaseConnection(){
 //     connection.getConnection((err,conn:PoolConnection)=>{
