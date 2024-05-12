@@ -12,7 +12,9 @@ type Functions ={
 
  const userRegisterValidationSchema:joi.ObjectSchema<auth>=joi.object({
     email : joi.string().required(),
-    password: joi.string().required()
+    password: joi.string().required(),
+    full_name:joi.string().required(),
+    photo:joi.string().allow("")
 })
 
 export const userRegistrationValidation:Functions['userRegisterValidation']=async(req:Request,res:Response,next:NextFunction)=>{

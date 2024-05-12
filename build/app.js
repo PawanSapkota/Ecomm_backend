@@ -34,21 +34,27 @@ const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const category_routes_1 = __importDefault(require("./routes/category.routes"));
 const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
+const role_routes_1 = __importDefault(require("./routes/role.routes"));
 const bodyParser = __importStar(require("body-parser"));
 const AppError_1 = __importDefault(require("./utils/AppError"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(bodyParser.json());
+app.use((0, cookie_parser_1.default)());
+app.use('/public', express_1.default.static('/src/public'));
 (0, database_1.getDatabaseConnection)(); //Database configuration
 const swaggerDocs = (0, swagger_jsdoc_1.default)(swaggerUI_1.swaggerOptions); //swagger documentation
 app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocs));
 app.get("/", (req, res) => {
+    // console.log(req.cookies)
     res.status(200).json({
         message: 'working'
     });
 });
 app.use("/api", category_routes_1.default);
 app.use("/api", auth_routes_1.default);
+app.use("/api", role_routes_1.default);
 // unhandled routes
 app.all("*", (req, res, next) => {
     next(new AppError_1.default(404, `Route ${req.originalUrl} not found`));

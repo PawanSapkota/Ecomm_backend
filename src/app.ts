@@ -6,12 +6,16 @@ import  swaggerJsDoc from "swagger-jsdoc";
 import swaggerUiExpress from "swagger-ui-express";
 import CategoryRoutes from "./routes/category.routes"
 import AuthRoutes from "./routes/auth.routes"
+import ChangRoleRoutes from "./routes/role.routes"
 import * as bodyParser from "body-parser";
 import AppError from "./utils/AppError";
+import  cookieParser from 'cookie-parser';
 
 const app:Application = express();
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(cookieParser());
+app.use('/public',express.static('./src/public'));
 
 getDatabaseConnection()  //Database configuration
 
@@ -20,6 +24,7 @@ app.use('/api-docs', swaggerUiExpress.serve, swaggerUiExpress.setup(swaggerDocs)
 
 
 app.get("/",(req:Request,res:Response)=>{
+  // console.log(req.cookies)
     res.status(200).json({
       message:'working'
     })
@@ -27,6 +32,7 @@ app.get("/",(req:Request,res:Response)=>{
 
 app.use("/api",CategoryRoutes);
 app.use("/api",AuthRoutes)
+app.use("/api",ChangRoleRoutes)
 
 
   // unhandled routes

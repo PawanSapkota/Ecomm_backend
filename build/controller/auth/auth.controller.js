@@ -35,22 +35,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.register = void 0;
+exports.login = exports.register = void 0;
 const auth_service_1 = require("../../services/auth/auth.service");
 const userInfoDetails_1 = require("../../models/userInfoDetails");
 const AppError_1 = __importDefault(require("../../utils/AppError"));
 const bcrypt = __importStar(require("bcryptjs"));
+const jwt_services_1 = require("../../services/auth/jwt.services");
+const config_1 = require("../../config");
 const register = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { email, password } = req.body;
+        const { email, password, full_name, photo } = req.body;
         const existingEmail = yield (0, userInfoDetails_1.findByEmail)(email);
         if (existingEmail) {
             return next(new AppError_1.default(400, "Email has been already used."));
         }
         const hashedPassword = yield bcrypt.hash(password, 10);
+        const photoPath = photo ? photo : "../../public/default.png";
         const userData = {
             email: email,
-            password: hashedPassword
+            password: hashedPassword,
+            full_name: full_name,
+            photo: photoPath,
         };
         yield (0, auth_service_1.userRegistrationService)(userData).then((data) => {
             res.status(201).json({
@@ -60,7 +65,44 @@ const register = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
         });
     }
     catch (error) {
-        next(error);
+        next(new AppError_1.default(error.status, error.message));
     }
 });
 exports.register = register;
+const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { email, password } = req.body;
+        const user = yield (0, userInfoDetails_1.findByEmail)(email);
+        if (!user) {
+            return next(new AppError_1.default(404, "User not registered."));
+        }
+        if (user.length === 0 || !(yield bcrypt.compare(password, user.password))) {
+            return next(new AppError_1.default(401, "Please Check Your Email or Password."));
+        }
+        const payload = {
+            email: email,
+            password: password
+        };
+        const access_token = (0, jwt_services_1.sign)(payload, config_1.JWT_SECRET, config_1.JWT_EXPIRY);
+        const refresh_token = (0, jwt_services_1.sign)(payload, config_1.JWT_SECRET, config_1.JWT_EXPIRY);
+        res.cookie('refresh_token', refresh_token, {
+            httpOnly: true,
+            secure: false,
+            maxAge: 36000000,
+        });
+        res.cookie('access_token', access_token, {
+            httpOnly: false,
+            secure: false,
+            maxAge: 72000000,
+        });
+        res.status(200).json({
+            email,
+            status: true,
+            message: "Login Successfully"
+        });
+    }
+    catch (error) {
+        next(new AppError_1.default(500, "Something went Wrong"));
+    }
+});
+exports.login = login;

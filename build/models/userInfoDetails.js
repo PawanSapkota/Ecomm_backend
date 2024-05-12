@@ -9,23 +9,34 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userRegistration = exports.findByEmail = void 0;
+exports.changeRole = exports.userRegistration = exports.findByEmail = void 0;
 const database_1 = require("../config/database");
 const findByEmail = (data) => __awaiter(void 0, void 0, void 0, function* () {
     const con = yield (0, database_1.getDatabaseConnection)();
-    let query = 'SELECT email FROM user_register WHERE email=?';
+    let query = 'SELECT email,password FROM users WHERE email=?';
     let result = yield con.promise().query(query, [data]);
     return result[0][0];
 });
 exports.findByEmail = findByEmail;
 const userRegistration = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password } = data;
+    const { email, password, full_name, photo } = data;
     const con = yield (0, database_1.getDatabaseConnection)();
-    let query = 'INSERT INTO user_register (email,password) VALUES (?,?)';
-    let result = yield con.promise().query(query, [email, password]);
+    let query = 'INSERT INTO users (email,password,full_name,photo) VALUES (?,?,?,?)';
+    let result = yield con.promise().query(query, [email, password, full_name, photo]);
     let id = result[0].insertId;
-    query = `SELECT email FROM user_register WHERE register_id = ?`;
+    query = `SELECT email,password,full_name,photo FROM users WHERE user_id = ?`;
     result = yield con.promise().query(query, [id]);
     return result[0];
 });
 exports.userRegistration = userRegistration;
+const changeRole = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    const { role_id, role_name } = data;
+    const con = yield (0, database_1.getDatabaseConnection)();
+    let query = `INSERT INTO roles (role_name) VALUES (?)`;
+    let result = yield con.promise().query(query, [role_id, role_name]);
+    let id = result[0].insertId;
+    query = `SELECT role_name FROM roles WHERE role_id=?`;
+    result = yield con.promise().query(query, [id]);
+    return result[0];
+});
+exports.changeRole = changeRole;

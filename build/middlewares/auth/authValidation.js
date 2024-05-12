@@ -36,7 +36,9 @@ exports.userRegistrationValidation = void 0;
 const joi = __importStar(require("joi"));
 const userRegisterValidationSchema = joi.object({
     email: joi.string().required(),
-    password: joi.string().required()
+    password: joi.string().required(),
+    full_name: joi.string().required(),
+    photo: joi.string().allow("")
 });
 const userRegistrationValidation = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { error } = userRegisterValidationSchema.validate(req.body);
