@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = exports.register = void 0;
+exports.logout = exports.login = exports.register = void 0;
 const auth_service_1 = require("../../services/auth/auth.service");
 const userInfoDetails_1 = require("../../models/userInfoDetails");
 const AppError_1 = __importDefault(require("../../utils/AppError"));
@@ -50,7 +50,7 @@ const register = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
             return next(new AppError_1.default(400, "Email has been already used."));
         }
         const hashedPassword = yield bcrypt.hash(password, 10);
-        const photoPath = photo ? photo : "../../public/default.png";
+        const photoPath = photo ? photo : "default.png";
         const userData = {
             email: email,
             password: hashedPassword,
@@ -106,3 +106,14 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.login = login;
+const logout = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        res.clearCookie("refresh_token");
+        res.clearCookie("access_token");
+        res.send("Logout Successfull");
+    }
+    catch (error) {
+        next(new AppError_1.default(error.status, error.message));
+    }
+});
+exports.logout = logout;
