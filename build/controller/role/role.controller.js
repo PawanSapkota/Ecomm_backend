@@ -17,15 +17,14 @@ const AppError_1 = __importDefault(require("../../utils/AppError"));
 const userInfoDetails_1 = require("../../models/userInfoDetails");
 const role = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { register_id, role } = req.body;
-        if (!register_id) {
-            return next(new AppError_1.default(404, "Please send the register_id"));
+        const { role_id, user_id } = req.body;
+        if (!role_id) {
+            return next(new AppError_1.default(404, "Please send the role_id"));
         }
         yield (0, userInfoDetails_1.changeRole)(req.body).then(() => {
             res.status(200).json({
                 status: true,
                 message: "Role Changed!!",
-                data: role
             });
         });
     }

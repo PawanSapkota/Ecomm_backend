@@ -30,10 +30,10 @@ const userRegistration = (data) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.userRegistration = userRegistration;
 const changeRole = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    const { role_id, role_name } = data;
+    const { role_id, user_id } = data;
     const con = yield (0, database_1.getDatabaseConnection)();
-    let query = `INSERT INTO roles (role_name) VALUES (?)`;
-    let result = yield con.promise().query(query, [role_id, role_name]);
+    let query = `UPDATE users set role_id = ? where user_id =?`;
+    let result = yield con.promise().query(query, [role_id, user_id]);
     let id = result[0].insertId;
     query = `SELECT role_name FROM roles WHERE role_id=?`;
     result = yield con.promise().query(query, [id]);
