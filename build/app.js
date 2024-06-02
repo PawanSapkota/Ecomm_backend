@@ -42,7 +42,7 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(bodyParser.json());
 app.use((0, cookie_parser_1.default)());
-app.use('/public', express_1.default.static('/src/public'));
+app.use('/public', express_1.default.static('./src/public'));
 (0, database_1.getDatabaseConnection)(); //Database configuration
 const swaggerDocs = (0, swagger_jsdoc_1.default)(swaggerUI_1.swaggerOptions); //swagger documentation
 app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocs));
