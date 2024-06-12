@@ -25,10 +25,10 @@ export const getCategory:Functions["getCategory"] =async(req:Request,res:Respons
 
 export const postCategory:Functions["postCategory"] = async(req:Request,res:Response,next:NextFunction)=>{
     try{
-        await postCategoryService(req.body).then((category:any)=>{
+        await postCategoryService(req.body).then((data:any)=>{
             res.status(201).json({
                 message:'Category Created Successfully!',
-                data:category
+                data:data
             })
         }) 
     }

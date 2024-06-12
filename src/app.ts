@@ -5,6 +5,7 @@ import { swaggerOptions } from "./config/swaggerUI";
 import  swaggerJsDoc from "swagger-jsdoc";
 import swaggerUiExpress from "swagger-ui-express";
 import CategoryRoutes from "./routes/category.routes"
+import ProductRoutes from "./routes/product.routes"
 import AuthRoutes from "./routes/auth.routes"
 import ChangRoleRoutes from "./routes/role.routes"
 import * as bodyParser from "body-parser";
@@ -31,8 +32,9 @@ app.get("/",(req:Request,res:Response)=>{
 })
 
 app.use("/api",CategoryRoutes);
-app.use("/api",AuthRoutes)
-app.use("/api",ChangRoleRoutes)
+app.use("/api",AuthRoutes);
+app.use("/api",ChangRoleRoutes);
+app.use("/api",ProductRoutes)
 
 
   // unhandled routes
